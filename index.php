@@ -56,63 +56,171 @@ $courses = [
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
+
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Katalog KursusKu</title>
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
 </head>
+
 <body>
 
-<h1>Katalog KursusKu</h1>
+<header class="site-header">
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>Kode</th>
-        <th>Nama Kursus</th>
-        <th>Biaya</th>
-        <th>Tanggal Mulai</th>
-        <th>Sisa Kursi</th>
-        <th>Status</th>
-    </tr>
+    <div class="container nav-wrap">
 
-    <?php foreach ($courses as $course): ?>
+        <a
+            href="index.php"
+            class="brand"
+        >
+            KursusKu
+        </a>
 
-        <?php
-        $status = statusKursus(
-            $course['quota'],
-            $course['registered']
-        );
+        <div class="nav-links">
 
-        $statusClass = $status === 'Penuh'
-            ? 'badge-full'
-            : 'badge-available';
-        ?>
+            <a href="index.php">
+                Katalog
+            </a>
 
-        <tr>
-            <td><?= htmlspecialchars($course['code']) ?></td>
+            <a href="registration.php">
+                Daftar Kursus
+            </a>
 
-            <td><?= htmlspecialchars(trim($course['name'])) ?></td>
+        </div>
 
-            <td><?= rupiah($course['fee']) ?></td>
+    </div>
 
-            <td><?= formatTanggal($course['start_date']) ?></td>
+</header>
 
-            <td>
-                <?= sisaKursi(
-                    $course['quota'],
-                    $course['registered']
-                ) ?>
-            </td>
 
-            <td>
-                <span class="<?= $statusClass ?>">
-                    <?= $status ?>
-                </span>
-            </td>
-        </tr>
+<main class="container">
 
-    <?php endforeach; ?>
+    <section class="page-intro">
 
-</table>
+        <p class="eyebrow">
+            Kursus Online
+        </p>
+
+        <h1>
+            Katalog KursusKu
+        </h1>
+
+        <p>
+            Pilih kursus yang sesuai dengan kebutuhan belajar kamu.
+        </p>
+
+        <a
+            href="registration.php"
+            class="btn-primary"
+        >
+            Daftar Kursus
+        </a>
+
+    </section>
+
+
+    <section class="form-card">
+
+        <h2>Daftar Kursus</h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Kode</th>
+                        <th>Nama Kursus</th>
+                        <th>Biaya</th>
+                        <th>Tanggal Mulai</th>
+                        <th>Sisa Kursi</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <?php foreach ($courses as $course): ?>
+
+                        <?php
+
+                        $status = statusKursus(
+                            $course['quota'],
+                            $course['registered']
+                        );
+
+                        $statusClass = $status === 'Penuh'
+                            ? 'badge-full'
+                            : 'badge-available';
+
+                        ?>
+
+                        <tr>
+
+                            <td>
+                                <?= htmlspecialchars($course['code']) ?>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars(
+                                    trim($course['name'])
+                                ) ?>
+                            </td>
+
+                            <td>
+                                <?= rupiah($course['fee']) ?>
+                            </td>
+
+                            <td>
+                                <?= formatTanggal(
+                                    $course['start_date']
+                                ) ?>
+                            </td>
+
+                            <td>
+                                <?= sisaKursi(
+                                    $course['quota'],
+                                    $course['registered']
+                                ) ?>
+                            </td>
+
+                            <td>
+
+                                <span class="<?= $statusClass ?>">
+                                    <?= htmlspecialchars($status) ?>
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    <?php endforeach; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
 
 </body>
+
 </html>
