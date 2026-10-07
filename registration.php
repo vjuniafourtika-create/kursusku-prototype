@@ -610,7 +610,7 @@
             </div>
 
             <div class="form-card">
-                <form action="process registration.php" method="GET">
+                <form action="process registration.php" method="POST">
 
                     <div class="form-title">
                         <div>

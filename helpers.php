@@ -1,226 +1,61 @@
 <?php
 
-require_once __DIR__ . '/helpers.php';
+function e(string $value): string
+{
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+function formatrupiah(int $amount): string
+{
+    return 'Rp ' . number_format($amount, 0, ',', '.');
+}
+function findCourse(array $courses, string $code): ?array {
+    foreach ($courses as $course) {
+        if ($course['code'] === $code) {
+            return $course;
+        }
+    }
 
-$courses = [
-    [
-        'code' => 'WEB-01',
-        'name' => 'Web Dasar',
-        'fee' => 200000,
-        'quota' => 30,
-        'registered' => 12,
-        'start_date' => '2026-09-21'
-    ],
-    [
-        'code' => 'PHP-01',
-        'name' => 'PHP Dasar',
-        'fee' => 250000,
-        'quota' => 30,
-        'registered' => 18,
-        'start_date' => '2026-09-22'
-    ],
-    [
-        'code' => 'PHP-02',
-        'name' => 'PHP Lanjutan',
-        'fee' => 300000,
-        'quota' => 25,
-        'registered' => 24,
-        'start_date' => '2026-09-24'
-    ],
-    [
-        'code' => 'LAR-01',
-        'name' => 'Laravel Fundamental',
-        'fee' => 350000,
-        'quota' => 25,
-        'registered' => 25,
-        'start_date' => '2026-09-28'
-    ],
-    [
-        'code' => 'DB-01',
-        'name' => 'MySQL Dasar',
-        'fee' => 275000,
-        'quota' => 20,
-        'registered' => 0,
-        'start_date' => '2026-10-01'
-    ],
-    [
-        'code' => 'UI-01',
-        'name' => 'UI Web Dasar',
-        'fee' => 225000,
-        'quota' => 35,
-        'registered' => 9,
-        'start_date' => '2026-10-03'
-    ],
-];
+    return null;
+}
+function statusKursus(int $quota, int $registered): string
+{
+    return $registered >= $quota ? 'Penuh' : 'Tersedia';
+}
 
-?>
+function sisaKursi(int $quota, int $registered): int
+{
+    return max(0, $quota - $registered);
+}
 
-<!DOCTYPE html>
-<html lang="id">
+function formatTanggal(string $date): string
+{
+    $value = new DateTimeImmutable($date);
+    return $value->format('d-m-Y');
+}
+function getDiscountPercent(string $participantType): int
+{
+    if ($participantType === 'mahasiswa') {
+        return 20;
+    } elseif ($participantType === 'guru') {
+        return 15;
+    }
 
-<head>
+    return 0;
+}
+// Fungsi untuk menentukan label metode belajar
+function getLearningModeLabel(string $mode): string
+{
+    switch ($mode) {
+        case 'offline':
+            return 'Tatap Muka';
 
-    <meta charset="UTF-8">
+        case 'online':
+            return 'Online';
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        case 'hybrid':
+            return 'Hybrid';
 
-    <title>Katalog KursusKu</title>
-
-    <link
-        rel="stylesheet"
-        href="assets/css/style.css"
-    >
-
-</head>
-
-<body>
-
-<header class="site-header">
-
-    <div class="container nav-wrap">
-
-        <a
-            href="index.php"
-            class="brand"
-        >
-            KursusKu
-        </a>
-
-        <div class="nav-links">
-
-            <a href="index.php">
-                Katalog
-            </a>
-
-            <a href="registration.php">
-                Daftar Kursus
-            </a>
-
-        </div>
-
-    </div>
-
-</header>
-
-
-<main class="container">
-
-    <section class="page-intro">
-
-        <p class="eyebrow">
-            Kursus Online
-        </p>
-
-        <h1>
-            Katalog KursusKu
-        </h1>
-
-        <p>
-            Pilih kursus yang sesuai dengan kebutuhan belajar kamu.
-        </p>
-
-        <a
-            href="registration.php"
-            class="btn-primary"
-        >
-            Daftar Kursus
-        </a>
-
-    </section>
-
-
-    <section class="form-card">
-
-        <h2>Daftar Kursus</h2>
-
-        <div class="table-wrapper">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Kode</th>
-                        <th>Nama Kursus</th>
-                        <th>Biaya</th>
-                        <th>Tanggal Mulai</th>
-                        <th>Sisa Kursi</th>
-                        <th>Status</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    <?php foreach ($courses as $course): ?>
-
-                        <?php
-
-                        $status = statusKursus(
-                            $course['quota'],
-                            $course['registered']
-                        );
-
-                        $statusClass = $status === 'Penuh'
-                            ? 'badge-full'
-                            : 'badge-available';
-
-                        ?>
-
-                        <tr>
-
-                            <td>
-                                <?= htmlspecialchars($course['code']) ?>
-                            </td>
-
-                            <td>
-                                <?= htmlspecialchars(
-                                    trim($course['name'])
-                                ) ?>
-                            </td>
-
-                            <td>
-                                <?= rupiah($course['fee']) ?>
-                            </td>
-
-                            <td>
-                                <?= formatTanggal(
-                                    $course['start_date']
-                                ) ?>
-                            </td>
-
-                            <td>
-                                <?= sisaKursi(
-                                    $course['quota'],
-                                    $course['registered']
-                                ) ?>
-                            </td>
-
-                            <td>
-
-                                <span class="<?= $statusClass ?>">
-                                    <?= htmlspecialchars($status) ?>
-                                </span>
-
-                            </td>
-
-                        </tr>
-
-                    <?php endforeach; ?>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-</main>
-
-</body>
-
-</html>
+        default:
+            return 'Tidak diketahui';
+    }
+}
