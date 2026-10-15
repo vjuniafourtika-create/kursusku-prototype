@@ -1,22 +1,34 @@
+```php
 <?php
 require __DIR__ . '/helpers.php';
 
+// ARRAY DATA HISTORY PENDAFTARAN
 $history = [
     [
-        'name' => 'viona',
+        'name' => 'Viona',
         'course' => 'Web Dasar',
         'total' => 240000
     ],
     [
-        'name' => 'farik',
+        'name' => 'Farik',
         'course' => 'PHP Dasar',
         'total' => 340000
     ],
     [
-        'name' => 'junia',
+        'name' => 'Junia',
         'course' => 'Laravel Dasar',
         'total' => 500000
     ],
+    [
+        'name' => 'Andi',
+        'course' => 'HTML dan CSS',
+        'total' => 200000
+    ],
+    [
+        'name' => 'Siti',
+        'course' => 'JavaScript Dasar',
+        'total' => 300000
+    ]
 ];
 ?>
 
@@ -26,7 +38,7 @@ $history = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>History Dummy - KursusKu</title>
+    <title>History Pendaftaran - KursusKu</title>
 
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -44,27 +56,30 @@ $history = [
             <div class="nav-links">
                 <a href="index.php">Beranda</a>
                 <a href="register.php">Daftar Kursus</a>
-                <a href="history.php" class="active">History Dummy</a>
+                <a href="history.php" class="active">
+                    History Pendaftaran
+                </a>
             </div>
 
         </div>
     </nav>
 
-
     <!-- KONTEN UTAMA -->
     <main class="history-container">
 
         <section class="history-header">
-            <span class="history-badge">DATA PENDAFTARAN</span>
+            <span class="history-badge">
+                DATA PENDAFTARAN
+            </span>
 
-            <h1>History Pendaftaran</h1>
+            <h1>History Pendaftaran Kursus</h1>
 
             <p>
-                Daftar data dummy peserta kursus yang ditampilkan
-                menggunakan perulangan <strong>foreach</strong>.
+                Berikut adalah daftar riwayat pendaftaran peserta
+                kursus pada aplikasi KursusKu.
+                Data ditampilkan menggunakan array dan perulangan foreach.
             </p>
         </section>
-
 
         <!-- TABEL HISTORY -->
         <section class="history-card">
@@ -76,37 +91,38 @@ $history = [
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama</th>
-                            <th>Kursus</th>
-                            <th>Total</th>
+                            <th>Nama Peserta</th>
+                            <th>Nama Kursus</th>
+                            <th>Total Biaya</th>
                         </tr>
                     </thead>
 
                     <tbody>
 
-                        <?php foreach ($history as $index => $item): ?>
+                        <?php
+                        // PERULANGAN FOREACH
+                        foreach ($history as $index => $item):
+                        ?>
 
-                            <tr>
+                        <tr>
+                            <td>
+                                <?= $index + 1 ?>
+                            </td>
 
-                                <td>
-                                    <?= $index + 1 ?>
-                                </td>
+                            <td>
+                                <strong>
+                                    <?= e($item['name']) ?>
+                                </strong>
+                            </td>
 
-                                <td>
-                                    <strong>
-                                        <?= e($item['name']) ?>
-                                    </strong>
-                                </td>
+                            <td>
+                                <?= e($item['course']) ?>
+                            </td>
 
-                                <td>
-                                    <?= e($item['course']) ?>
-                                </td>
-
-                                <td class="total-price">
-                                    <?= formatRupiah($item['total']) ?>
-                                </td>
-
-                            </tr>
+                            <td class="total-price">
+                                <?= formatRupiah($item['total']) ?>
+                            </td>
+                        </tr>
 
                         <?php endforeach; ?>
 
@@ -118,8 +134,7 @@ $history = [
 
         </section>
 
-
-        <!-- TOMBOL KEMBALI -->
+        <!-- TOMBOL AKSI -->
         <div class="history-action">
 
             <a href="register.php" class="btn-primary">
@@ -127,13 +142,12 @@ $history = [
             </a>
 
             <a href="index.php" class="btn-secondary">
-                ← Kembali ke Beranda
+                &larr; Kembali ke Beranda
             </a>
 
         </div>
 
     </main>
-
 
     <!-- FOOTER -->
     <footer class="footer">
@@ -144,3 +158,4 @@ $history = [
 
 </body>
 </html>
+```
