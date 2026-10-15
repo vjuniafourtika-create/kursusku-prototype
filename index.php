@@ -303,6 +303,95 @@ $year = date('Y');
                         </div>
                     </article>
 
+                                        <!-- KURSUS LARAVEL FUNDAMENTAL -->
+                    <article class="course-card">
+                        <div class="course-image laravel-image">
+                            <div class="laravel-logo">L</div>
+                            <div class="framework-window">
+                                <span>● ● ●</span>
+                                <strong>Laravel</strong>
+                            </div>
+                        </div>
+
+                        <div class="course-body">
+                            <div class="course-meta">
+                                <span class="category">Framework</span>
+                                <span class="level">Menengah</span>
+                            </div>
+
+                            <h3>Laravel Fundamental</h3>
+
+                            <p>
+                                Pelajari routing, controller, model,
+                                migration, dan CRUD menggunakan Laravel.
+                            </p>
+
+                            <a href="register.php" class="course-link">
+                                Daftar Kursus →
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- KURSUS MYSQL -->
+                    <article class="course-card">
+                        <div class="course-image php-image">
+                            <div class="php-logo">SQL</div>
+                            <div class="database-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+
+                        <div class="course-body">
+                            <div class="course-meta">
+                                <span class="category">Database</span>
+                                <span class="level">Pemula</span>
+                            </div>
+
+                            <h3>MySQL</h3>
+
+                            <p>
+                                Pelajari pembuatan database, tabel,
+                                query SQL, relasi, dan pengelolaan data.
+                            </p>
+
+                            <a href="register.php" class="course-link">
+                                Daftar Kursus →
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- KURSUS UI WEB DASAR -->
+                    <article class="course-card">
+                        <div class="course-image web-image">
+                            <div class="illustration-window">
+                                <span>● ● ●</span>
+                                <strong>UI</strong>
+                                <small>Web Design</small>
+                            </div>
+                        </div>
+
+                        <div class="course-body">
+                            <div class="course-meta">
+                                <span class="category">UI Design</span>
+                                <span class="level">Pemula</span>
+                            </div>
+
+                            <h3>UI Web Dasar</h3>
+
+                            <p>
+                                Pelajari tata letak halaman web,
+                                pemilihan warna, tipografi, dan desain
+                                antarmuka yang responsif.
+                            </p>
+
+                            <a href="register.php" class="course-link">
+                                Daftar Kursus →
+                            </a>
+                        </div>
+                    </article>
+
                 </div>
             </div>
         </section>

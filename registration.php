@@ -1,538 +1,644 @@
+
+<?php
+$courses = [
+    'web' => [
+        'name' => 'Web Dasar',
+        'fee' => 300000,
+        'description' => 'Belajar dasar HTML, CSS, dan pembuatan website.'
+    ],
+    'php' => [
+        'name' => 'PHP Dasar',
+        'fee' => 400000,
+        'description' => 'Mengenal PHP untuk membuat website dinamis.'
+    ],
+    'laravel' => [
+        'name' => 'Laravel Dasar',
+        'fee' => 500000,
+        'description' => 'Membangun aplikasi web menggunakan Laravel.'
+    ],
+    'laravel-fundamental' => [
+        'name' => 'Laravel Fundamental',
+        'fee' => 600000,
+        'description' => 'Memahami konsep Laravel untuk pengembangan aplikasi.'
+    ],
+    'mysql' => [
+        'name' => 'MySQL',
+        'fee' => 350000,
+        'description' => 'Belajar mengelola database dengan MySQL.'
+    ],
+    'ui-web' => [
+        'name' => 'UI Web Dasar',
+        'fee' => 300000,
+        'description' => 'Mempelajari desain antarmuka website yang menarik.'
+    ]
+];
+
+$interestOptions = [
+    'frontend' => 'Frontend',
+    'backend' => 'Backend',
+    'database' => 'Database',
+    'uiux' => 'UI/UX'
+];
+
+function rupiah($amount)
+{
+    return 'Rp ' . number_format($amount, 0, ',', '.');
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Daftar Kursus - KursusKu</title>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap');
-
-        :root {
-            --blue: #164392;
-            --blue-dark: #0b2b68;
-            --blue-soft: #eaf1fb;
-            --yellow: #ffbd64;
-            --text: #172b4d;
-            --muted: #718097;
-            --border: #dce5f0;
-            --white: #ffffff;
-            --background: #f6f9fd;
-        }
-
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
+        :root {
+            --blue: #1746a2;
+            --blue-dark: #102f70;
+            --blue-light: #eaf1ff;
+            --yellow: #ffd447;
+            --white: #ffffff;
+            --text: #243047;
+            --muted: #697586;
+            --border: #dce3ef;
         }
 
         body {
-            margin: 0;
-            min-width: 320px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f8ff;
             color: var(--text);
-            background: var(--background);
-            font-family: "DM Sans", Arial, sans-serif;
+            line-height: 1.6;
         }
 
         a {
-            color: inherit;
             text-decoration: none;
         }
 
-        button,
-        input,
-        select {
-            font: inherit;
-        }
-
         .container {
-            width: min(1180px, calc(100% - 40px));
+            width: min(1120px, 92%);
             margin: auto;
         }
 
-        .site-header {
+        /* NAVBAR */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 3px 15px rgba(20, 50, 100, 0.08);
             position: sticky;
-            z-index: 10;
             top: 0;
-            border-bottom: 1px solid rgba(220, 229, 240, .8);
-            background: rgba(246, 249, 253, .9);
-            backdrop-filter: blur(14px);
+            z-index: 10;
         }
 
-        .header-content {
+        .nav-content {
+            min-height: 76px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            min-height: 72px;
+            align-items: center;
+            gap: 20px;
         }
 
         .logo {
+            color: var(--blue);
+            font-size: 27px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #e4ae00;
+        }
+
+        .nav-links {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: var(--blue-dark);
-            font-family: Fraunces, Georgia, serif;
-            font-size: 24px;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #344054;
             font-weight: 600;
-        }
-
-        .logo-icon {
-            display: grid;
-            width: 37px;
-            height: 37px;
-            place-items: center;
-            border-radius: 11px;
-            color: var(--blue);
-            background: var(--yellow);
-            font-weight: bold;
-        }
-
-        .navigation {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--muted);
             font-size: 14px;
-            font-weight: 700;
         }
 
-        .navigation a {
-            padding: 10px 15px;
-            border-radius: 999px;
-            transition: .2s;
-        }
-
-        .navigation a:hover {
+        .nav-links a:hover,
+        .nav-links .active {
             color: var(--blue);
-            background: var(--blue-soft);
         }
 
-        .navigation .active {
-            color: white;
+        .nav-button {
             background: var(--blue);
+            color: white !important;
+            padding: 11px 18px;
+            border-radius: 10px;
         }
 
+        /* HERO */
         .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            gap: 70px;
-            padding: 85px 0 100px;
+            padding: 65px 0;
+            background: linear-gradient(125deg, #12357d, #2464d9);
+            color: white;
+            overflow: hidden;
         }
 
-        .label {
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.4fr 0.8fr;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .hero-label {
             display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 7px 14px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 49px);
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--yellow);
+        }
+
+        .hero p {
+            color: #e5edff;
+            max-width: 590px;
+            margin-bottom: 25px;
+        }
+
+        .hero-button {
+            display: inline-block;
+            background: var(--yellow);
+            color: var(--blue-dark);
+            padding: 13px 23px;
+            border-radius: 10px;
+            font-weight: 800;
+        }
+
+        .hero-card {
+            background: white;
+            color: var(--text);
+            padding: 28px;
+            border-radius: 22px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-card .emoji {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .hero-card h3 {
             color: var(--blue);
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .hero-card p {
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .hero-stat {
+            display: flex;
+            gap: 22px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat strong {
+            display: block;
+            font-size: 21px;
+            color: var(--yellow);
+        }
+
+        .hero-stat span {
+            font-size: 13px;
+            color: #e5edff;
+        }
+
+        /* SECTION */
+        .section {
+            padding: 65px 0;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .section-heading .eyebrow {
+            color: var(--blue);
+            text-transform: uppercase;
             font-size: 12px;
             font-weight: 800;
-            letter-spacing: .16em;
-            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .label::before {
-            display: inline-block;
-            width: 7px;
-            height: 7px;
-            margin-right: 8px;
-            border-radius: 50%;
-            background: var(--yellow);
-            content: "";
+        .section-heading h2 {
+            color: #162d59;
+            font-size: clamp(26px, 4vw, 35px);
+            margin: 8px 0;
         }
 
-        h1,
-        h2,
-        h3 {
-            font-family: Fraunces, Georgia, serif;
-            letter-spacing: -.05em;
-        }
-
-        h1 {
-            max-width: 620px;
-            margin: 25px 0 25px;
-            color: var(--blue);
-            font-size: clamp(52px, 7vw, 94px);
-            line-height: .95;
-        }
-
-        h1 em {
-            color: var(--blue-dark);
-            font-weight: 500;
-        }
-
-        .hero-description {
-            max-width: 540px;
+        .section-heading p {
             color: var(--muted);
-            font-size: 17px;
-            line-height: 1.75;
         }
 
-        .hero-link {
-            display: inline-flex;
-            gap: 10px;
-            margin-top: 27px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--yellow);
-            color: var(--blue);
+        /* COURSE CATALOG */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid #e6ebf5;
+            border-radius: 17px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(25, 55, 110, 0.05);
+            transition: 0.25s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 32px rgba(25, 55, 110, 0.12);
+        }
+
+        .course-icon {
+            width: 54px;
+            height: 54px;
+            display: grid;
+            place-items: center;
+            background: var(--blue-light);
+            border-radius: 14px;
+            font-size: 27px;
+            margin-bottom: 17px;
+        }
+
+        .course-card h3 {
+            color: #18366f;
+            margin-bottom: 8px;
+        }
+
+        .course-card p {
             font-size: 14px;
-            font-weight: 700;
-        }
-
-        .hero-visual {
-            position: relative;
-            min-height: 430px;
-        }
-
-        .visual-glow {
-            position: absolute;
-            top: 25px;
-            right: 15px;
-            width: 230px;
-            height: 230px;
-            border-radius: 50%;
-            background: rgba(255, 189, 100, .45);
-            filter: blur(45px);
-        }
-
-        .visual-card {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 88%;
-            height: 90%;
-            overflow: hidden;
-            border: 8px solid white;
-            border-radius: 35px 35px 35px 105px;
-            background: linear-gradient(135deg, #234f9e, #0a2e6e);
-            box-shadow: 0 28px 70px -35px rgba(20, 55, 120, .6);
-        }
-
-        .visual-card::before {
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at 28% 30%, rgba(255, 189, 100, .9) 0 7%, transparent 8%),
-                radial-gradient(circle at 75% 68%, rgba(255, 255, 255, .2) 0 12%, transparent 13%),
-                linear-gradient(135deg, transparent 40%, rgba(255,255,255,.12) 41% 42%, transparent 43%);
-            content: "";
-        }
-
-        .book-shape {
-            position: absolute;
-            right: 16%;
-            bottom: 19%;
-            width: 48%;
-            height: 38%;
-            padding: 20px;
-            border-radius: 7px;
-            color: var(--blue);
-            background: #f7f0dc;
-            box-shadow: 15px 18px 0 rgba(0, 0, 0, .12);
-            transform: rotate(-13deg);
-        }
-
-        .book-shape::before,
-        .book-shape::after {
-            display: block;
-            width: 80%;
-            height: 7px;
-            margin: 12px 0;
-            border-radius: 4px;
-            background: #9db8e6;
-            content: "";
-        }
-
-        .book-shape::after {
-            width: 55%;
-            background: var(--yellow);
-        }
-
-        .visual-badge {
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 190px;
-            padding: 17px;
-            border: 1px solid rgba(22, 67, 146, .12);
-            border-radius: 20px;
-            background: rgba(255, 255, 255, .95);
-            box-shadow: 0 22px 55px -35px rgba(21, 54, 115, .5);
-        }
-
-        .visual-badge strong {
-            display: block;
-            color: var(--blue);
-            font-family: Fraunces, Georgia, serif;
-            font-size: 25px;
-        }
-
-        .visual-badge span {
-            display: block;
-            margin-top: 4px;
             color: var(--muted);
-            font-size: 11px;
+            min-height: 66px;
         }
 
+        .course-price {
+            color: var(--blue);
+            font-weight: 800;
+            font-size: 19px;
+            margin: 17px 0;
+        }
+
+        .course-link {
+            display: inline-block;
+            color: var(--blue);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* REGISTRATION */
         .registration-section {
-            padding: 95px 0;
-            background: rgba(234, 241, 251, .7);
+            background: #eaf1ff;
         }
 
         .registration-layout {
             display: grid;
-            grid-template-columns: .75fr 1.25fr;
-            gap: 80px;
+            grid-template-columns: 0.75fr 1.25fr;
             align-items: start;
+            gap: 30px;
         }
 
-        .registration-copy h2 {
-            max-width: 430px;
-            margin: 18px 0;
-            color: var(--blue);
-            font-size: clamp(42px, 5vw, 62px);
-            line-height: 1.03;
+        .info-panel {
+            background: var(--blue);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            position: sticky;
+            top: 100px;
         }
 
-        .registration-copy p {
-            max-width: 390px;
-            color: var(--muted);
-            line-height: 1.8;
+        .info-panel h3 {
+            font-size: 25px;
+            margin-bottom: 12px;
+        }
+
+        .info-panel > p {
+            color: #e2ebff;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .info-item .check {
+            background: var(--yellow);
+            color: var(--blue-dark);
+            border-radius: 50%;
+            width: 27px;
+            height: 27px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            font-weight: 800;
+        }
+
+        .info-item strong {
+            display: block;
+        }
+
+        .info-item small {
+            color: #dce7ff;
         }
 
         .form-card {
-            padding: 32px;
-            border: 1px solid rgba(22, 67, 146, .14);
-            border-radius: 26px;
             background: white;
-            box-shadow: 0 28px 80px -42px rgba(21, 54, 115, .48);
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(20, 50, 100, 0.08);
         }
 
-        .form-title {
-            display: flex;
-            align-items: start;
-            justify-content: space-between;
-            padding-bottom: 22px;
+        .form-card h3 {
+            color: #18366f;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .form-description {
+            color: var(--muted);
+            font-size: 14px;
             margin-bottom: 25px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .form-title h2 {
-            margin: 8px 0 0;
-            font-size: 35px;
-        }
-
-        .step {
-            padding: 8px 12px;
-            border-radius: 99px;
-            color: var(--blue);
-            background: var(--blue-soft);
-            font-size: 11px;
-            font-weight: 800;
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 19px;
         }
 
         .field {
-            display: block;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
+            min-width: 0;
         }
 
-        .field label {
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field > label,
+        .field > .field-label {
             display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: #263957;
             margin-bottom: 8px;
-            color: var(--text);
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: .08em;
-            text-transform: uppercase;
         }
 
-        .field input,
-        .field select {
+        .required {
+            color: #d43b3b;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
             width: 100%;
-            min-height: 52px;
-            padding: 0 15px;
+            padding: 13px 14px;
             border: 1px solid var(--border);
-            border-radius: 13px;
-            outline: none;
+            border-radius: 10px;
+            background: #fff;
+            font: inherit;
+            font-size: 14px;
             color: var(--text);
-            background: white;
-            transition: .2s;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
         }
 
-        .field input:focus,
-        .field select:focus {
-            border-color: #547fc8;
-            box-shadow: 0 0 0 4px rgba(84, 127, 200, .14);
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(23, 70, 162, 0.1);
         }
 
-        .field select {
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .participant-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
             cursor: pointer;
+        }
+
+        .participant-option:has(input:checked) {
+            background: var(--blue-light);
+            border-color: var(--blue);
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            accent-color: var(--blue);
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        /* INTERESTS */
+        .interests-box {
+            background: #f8faff;
+            border: 1px solid #e0e8f7;
+            border-radius: 13px;
+            padding: 18px;
+        }
+
+        .interests-box > p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .interest-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .interest-option:hover {
+            border-color: var(--blue);
+            background: var(--blue-light);
+        }
+
+        .interest-option:has(input:checked) {
+            background: #eaf1ff;
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        .interest-note {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 10px;
         }
 
         .submit-button {
             width: 100%;
-            min-height: 54px;
-            margin-top: 5px;
-            border: 0;
-            border-radius: 13px;
-            cursor: pointer;
-            color: white;
+            border: none;
             background: var(--blue);
+            color: white;
+            padding: 15px;
+            border-radius: 11px;
+            font-size: 15px;
             font-weight: 800;
-            transition: .2s;
+            cursor: pointer;
+            transition: 0.2s;
         }
 
         .submit-button:hover {
             background: var(--blue-dark);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
-        .privacy {
-            margin: 14px 0 0;
-            color: var(--muted);
-            font-size: 11px;
+        .privacy-note {
             text-align: center;
-        }
-
-        .catalog {
-            padding: 95px 0;
-        }
-
-        .catalog h2 {
-            margin: 15px 0 35px;
-            color: var(--blue);
-            font-size: 52px;
-        }
-
-        .courses {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-        }
-
-        .course {
-            min-height: 210px;
-            padding: 20px;
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            background: white;
-            transition: .2s;
-        }
-
-        .course:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 45px -30px var(--blue);
-        }
-
-        .course-number {
-            display: grid;
-            width: 40px;
-            height: 40px;
-            place-items: center;
-            border-radius: 12px;
-            color: var(--blue);
-            background: var(--blue-soft);
             font-size: 12px;
-            font-weight: 800;
-        }
-
-        .course h3 {
-            margin: 35px 0 8px;
-            font-size: 23px;
-        }
-
-        .course p {
-            margin: 0;
             color: var(--muted);
-            font-size: 12px;
+            margin-top: 14px;
         }
 
+        /* FOOTER */
         footer {
-            padding: 25px 0;
+            background: #10244a;
             color: white;
-            background: var(--blue-dark);
+            padding: 30px 0;
         }
 
         .footer-content {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-content p {
+            color: #c7d4ed;
+            font-size: 13px;
         }
 
         .footer-logo {
             color: white;
+            font-size: 22px;
+            font-weight: 800;
         }
 
-        .footer-text {
-            color: rgba(255,255,255,.7);
-            font-size: 12px;
+        .footer-logo span {
+            color: var(--yellow);
         }
 
+        /* RESPONSIVE */
         @media (max-width: 850px) {
-            .hero,
+            .hero-content,
             .registration-layout {
                 grid-template-columns: 1fr;
             }
 
-            .hero {
-                gap: 40px;
-                padding-top: 60px;
+            .course-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .hero-visual {
-                min-height: 390px;
-            }
-
-            .courses {
-                grid-template-columns: 1fr 1fr;
+            .info-panel {
+                position: static;
             }
         }
 
-        @media (max-width: 560px) {
-            .container {
-                width: min(100% - 28px, 1180px);
+        @media (max-width: 600px) {
+            .nav-content {
+                padding: 15px 0;
+                align-items: flex-start;
+                flex-direction: column;
             }
 
-            .navigation {
-                gap: 0;
-                font-size: 12px;
+            .nav-links {
+                width: 100%;
+                gap: 14px;
+                flex-wrap: wrap;
             }
 
-            .navigation a {
-                padding: 8px;
+            .hero {
+                padding: 45px 0;
             }
 
-            .navigation .active {
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 54px;
-            }
-
-            .form-card {
-                padding: 21px 16px;
-            }
-
+            .course-grid,
             .form-grid,
-            .courses {
+            .interests-grid {
                 grid-template-columns: 1fr;
             }
 
-            .catalog h2 {
-                font-size: 43px;
+            .field.full {
+                grid-column: auto;
             }
 
-            .footer-content {
-                align-items: flex-start;
-                flex-direction: column;
-                gap: 10px;
+            .choice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-card,
+            .info-panel {
+                padding: 22px;
+            }
+
+            .section {
+                padding: 45px 0;
             }
         }
     </style>
@@ -540,211 +646,416 @@
 
 <body>
 
-<header class="site-header">
-    <div class="container header-content">
-        <a class="logo" href="registration.php">
-            <span class="logo-icon">▣</span>
-            <span>KursusKu</span>
-        </a>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="container nav-content">
+            <a href="#beranda" class="logo">Kursus<span>Ku</span></a>
 
-        <nav class="navigation">
-            <a href="#katalog">Katalog</a>
-            <a class="active" href="#daftar-kursus">Daftar Kursus</a>
-        </nav>
-    </div>
-</header>
-
-<main>
-    <section class="hero container">
-        <div>
-            <span class="label">Ruang untuk bertumbuh</span>
-
-            <h1>
-                Belajar sesuatu yang
-                <em>berarti.</em>
-            </h1>
-
-            <p class="hero-description">
-                KursusKu membantu kamu menemukan kelas yang tepat,
-                membangun keahlian baru, dan melangkah lebih dekat
-                pada versi dirimu yang ingin kamu temui.
-            </p>
-
-            <a class="hero-link" href="#daftar-kursus">
-                Temukan kelasmu →
-            </a>
+            <nav class="nav-links">
+                <a href="#beranda">Beranda</a>
+                <a href="#kursus">Katalog Kursus</a>
+                <a href="#pendaftaran" class="active">Daftar Kursus</a>
+                <a href="history.php">History</a>
+                <a href="#pendaftaran" class="nav-button">Daftar Sekarang</a>
+            </nav>
         </div>
+    </header>
 
-        <div class="hero-visual">
-            <div class="visual-glow"></div>
+    <!-- HERO -->
+    <section class="hero" id="beranda">
+        <div class="container hero-content">
+            <div>
+                <span class="hero-label">Platform Belajar Digital</span>
 
-            <div class="visual-card">
-                <div class="book-shape">
-                    Catatan belajar
+                <h1>
+                    Tingkatkan Skill,<br>
+                    Wujudkan <span>Masa Depanmu.</span>
+                </h1>
+
+                <p>
+                    Belajar teknologi bersama KursusKu. Pilih kursus yang
+                    sesuai dengan minatmu dan mulai perjalanan belajar
+                    untuk meningkatkan keterampilan digital.
+                </p>
+
+                <a href="#pendaftaran" class="hero-button">
+                    Daftar Kursus Sekarang →
+                </a>
+
+                <div class="hero-stat">
+                    <div>
+                        <strong>6</strong>
+                        <span>Pilihan Kursus</span>
+                    </div>
+                    <div>
+                        <strong>Fleksibel</strong>
+                        <span>Pilih Minat Belajar</span>
+                    </div>
+                    <div>
+                        <strong>Digital</strong>
+                        <span>Belajar Teknologi</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="visual-badge">
-                <strong>1.240+</strong>
-                <span>pelajar mulai dari langkah kecil</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="daftar-kursus" class="registration-section">
-        <div class="container registration-layout">
-
-            <div class="registration-copy">
-                <span class="label">Pendaftaran kursus</span>
-
-                <h2>
-                    Satu langkah kecil,
-                    banyak kemungkinan.
-                </h2>
-
+            <div class="hero-card">
+                <div class="emoji">🎓</div>
+                <h3>Mulai Belajar Hari Ini!</h3>
                 <p>
-                    Ceritakan sedikit tentangmu. Kami akan siapkan
-                    langkah berikutnya dengan jelas, tanpa proses
-                    yang berbelit.
+                    Pilih program belajar, tentukan minatmu, dan daftarkan
+                    diri melalui formulir KursusKu.
                 </p>
             </div>
+        </div>
+    </section>
 
-            <div class="form-card">
-                <form action="process registration.php" method="POST">
+    <!-- KATALOG KURSUS -->
+    <section class="section" id="kursus">
+        <div class="container">
+            <div class="section-heading">
+                <span class="eyebrow">Katalog Pembelajaran</span>
+                <h2>Temukan Kursus Pilihanmu</h2>
+                <p>Pilih program yang sesuai dengan tujuan belajarmu.</p>
+            </div>
 
-                    <div class="form-title">
-                        <div>
-                            <span class="label">Mulai dari sini</span>
-                            <h2>Isi data diri</h2>
+            <div class="course-grid">
+                <?php
+                $courseIcons = [
+                    'web' => '🌐',
+                    'php' => '💻',
+                    'laravel' => '🚀',
+                    'laravel-fundamental' => '⚙️',
+                    'mysql' => '🗄️',
+                    'ui-web' => '🎨'
+                ];
+                ?>
+
+                <?php foreach ($courses as $code => $course): ?>
+                    <article class="course-card">
+                        <div class="course-icon">
+                            <?= $courseIcons[$code] ?>
                         </div>
 
-                        <span class="step">01 / 01</span>
-                    </div>
+                        <h3>
+                            <?= htmlspecialchars($course['name']) ?>
+                        </h3>
 
-                    <div class="form-grid">
-                        <div class="field">
-                            <label for="name">Nama lengkap</label>
-                            <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                placeholder="Masukkan nama lengkap"
-                                required
-                            >
+                        <p>
+                            <?= htmlspecialchars($course['description']) ?>
+                        </p>
+
+                        <div class="course-price">
+                            <?= rupiah($course['fee']) ?>
                         </div>
 
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="contoh@email.com"
-                                required
-                            >
-                        </div>
-
-                        <div class="field">
-                            <label for="phone">Nomor HP</label>
-                            <input
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                placeholder="08xxxxxxxxxx"
-                                required
-                            >
-                        </div>
-
-                        <div class="field">
-                            <label for="study">Program studi</label>
-                            <input
-                                type="text"
-                                id="study"
-                                name="study"
-                                placeholder="Contoh: PTIK"
-                                required
-                            >
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label for="course">Pilih kursus</label>
-
-                        <select id="course" name="course" required>
-                            <option value="">-- Pilih kursus --</option>
-                            <option value="Desain UI/UX">
-                                Desain UI/UX
-                            </option>
-                            <option value="Digital Marketing">
-                                Digital Marketing
-                            </option>
-                            <option value="Web Development">
-                                Web Development
-                            </option>
-                            <option value="Data Analytics">
-                                Data Analytics
-                            </option>
-                        </select>
-                    </div>
-
-                    <button class="submit-button" type="submit">
-                        Daftar sekarang →
-                    </button>
-
-                    <p class="privacy">
-                        Data kamu aman dan hanya digunakan untuk
-                        keperluan pendaftaran kelas.
-                    </p>
-                </form>
+                        <a
+                            href="#pendaftaran"
+                            class="course-link"
+                            onclick="pilihKursus('<?= htmlspecialchars($code, ENT_QUOTES) ?>')"
+                        >
+                            Pilih Kursus →
+                        </a>
+                    </article>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <section id="katalog" class="catalog container">
-        <span class="label">Pilih arahmu</span>
+    <!-- FORM PENDAFTARAN -->
+    <section class="section registration-section" id="pendaftaran">
+        <div class="container">
+            <div class="section-heading">
+                <span class="eyebrow">Pendaftaran Online</span>
+                <h2>Daftar Kursus di KursusKu</h2>
+                <p>Isi data dengan benar sebelum mengirim formulir.</p>
+            </div>
 
-        <h2>Kelas untuk rasa ingin tahu.</h2>
+            <div class="registration-layout">
 
-        <div class="courses">
-            <a class="course" href="#daftar-kursus">
-                <span class="course-number">01</span>
-                <h3>Desain UI/UX</h3>
-                <p>Kelas kreatif · 8 minggu</p>
-            </a>
+                <!-- INFORMASI PENDAFTARAN -->
+                <aside class="info-panel">
+                    <h3>Mulai Langkah Pertamamu!</h3>
 
-            <a class="course" href="#daftar-kursus">
-                <span class="course-number">02</span>
-                <h3>Digital Marketing</h3>
-                <p>Kelas intensif · 6 minggu</p>
-            </a>
+                    <p>
+                        Lengkapi formulir pendaftaran dan pilih kursus
+                        sesuai kebutuhanmu.
+                    </p>
 
-            <a class="course" href="#daftar-kursus">
-                <span class="course-number">03</span>
-                <h3>Web Development</h3>
-                <p>Kelas praktik · 10 minggu</p>
-            </a>
+                    <div class="info-item">
+                        <span class="check">✓</span>
+                        <div>
+                            <strong>Pilih Kursus</strong>
+                            <small>Tentukan program belajar yang kamu inginkan.</small>
+                        </div>
+                    </div>
 
-            <a class="course" href="#daftar-kursus">
-                <span class="course-number">04</span>
-                <h3>Data Analytics</h3>
-                <p>Kelas terapan · 8 minggu</p>
-            </a>
+                    <div class="info-item">
+                        <span class="check">✓</span>
+                        <div>
+                            <strong>Isi Data Diri</strong>
+                            <small>Masukkan identitas dan informasi peserta.</small>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="check">✓</span>
+                        <div>
+                            <strong>Tentukan Interests</strong>
+                            <small>Pilih bidang teknologi yang kamu minati.</small>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="check">✓</span>
+                        <div>
+                            <strong>Kirim Pendaftaran</strong>
+                            <small>Periksa kembali data sebelum dikirim.</small>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- FORM -->
+                <div class="form-card">
+                    <h3>Formulir Pendaftaran</h3>
+
+                    <p class="form-description">
+                        Kolom bertanda <span class="required">*</span>
+                        wajib diisi.
+                    </p>
+
+                    <form action="process.php" method="POST">
+                        <div class="form-grid">
+
+                            <!-- NAMA -->
+                            <div class="field">
+                                <label for="name">
+                                    Nama Lengkap <span class="required">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Masukkan nama lengkap"
+                                    required
+                                    maxlength="100"
+                                >
+                            </div>
+
+                            <!-- EMAIL -->
+                            <div class="field">
+                                <label for="email">
+                                    Email <span class="required">*</span>
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="nama@email.com"
+                                    required
+                                >
+                            </div>
+
+                            <!-- NOMOR HP -->
+                            <div class="field">
+                                <label for="phone">Nomor HP</label>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Contoh: 081234567890"
+                                    maxlength="20"
+                                >
+                            </div>
+
+                            <!-- PENDIDIKAN -->
+                            <div class="field">
+                                <label for="study">Pendidikan</label>
+
+                                <select id="study" name="study">
+                                    <option value="">-- Pilih pendidikan --</option>
+                                    <option value="SMP">SMP</option>
+                                    <option value="SMA/SMK">SMA/SMK</option>
+                                    <option value="Mahasiswa">Mahasiswa</option>
+                                    <option value="Sarjana">Sarjana</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                            </div>
+
+                            <!-- PILIH KURSUS -->
+                            <div class="field full">
+                                <label for="course_code">
+                                    Pilih Kursus <span class="required">*</span>
+                                </label>
+
+                                <select
+                                    id="course_code"
+                                    name="course_code"
+                                    required
+                                >
+                                    <option value="">-- Pilih kursus --</option>
+
+                                    <?php foreach ($courses as $code => $course): ?>
+                                        <option value="<?= htmlspecialchars($code) ?>">
+                                            <?= htmlspecialchars($course['name']) ?>
+                                            - <?= rupiah($course['fee']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <!-- JENIS PESERTA -->
+                            <div class="field full">
+                                <span class="field-label">
+                                    Jenis Peserta <span class="required">*</span>
+                                </span>
+
+                                <div class="choice-grid">
+                                    <label class="participant-option">
+                                        <input
+                                            type="radio"
+                                            name="participant_type"
+                                            value="mahasiswa"
+                                            required
+                                        >
+                                        Mahasiswa
+                                    </label>
+
+                                    <label class="participant-option">
+                                        <input
+                                            type="radio"
+                                            name="participant_type"
+                                            value="guru"
+                                        >
+                                        Guru
+                                    </label>
+
+                                    <label class="participant-option">
+                                        <input
+                                            type="radio"
+                                            name="participant_type"
+                                            value="umum"
+                                        >
+                                        Umum
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- INTERESTS -->
+                            <div class="field full">
+                                <span class="field-label">
+                                    Interests / Minat Belajar
+                                    <span class="required">*</span>
+                                </span>
+
+                                <div class="interests-box">
+                                    <p>
+                                        Pilih satu atau beberapa bidang yang
+                                        kamu minati.
+                                    </p>
+
+                                    <div class="interests-grid">
+                                        <?php foreach ($interestOptions as $value => $label): ?>
+                                            <label class="interest-option">
+                                                <input
+                                                    type="checkbox"
+                                                    name="interests[]"
+                                                    value="<?= htmlspecialchars($value) ?>"
+                                                >
+                                                <span>
+                                                    <?= htmlspecialchars($label) ?>
+                                                </span>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <div class="interest-note">
+                                        Contoh: kamu bisa memilih Frontend
+                                        dan UI/UX sekaligus.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODE BELAJAR -->
+                            <div class="field full">
+                                <label for="learning_mode">Mode Belajar</label>
+
+                                <select
+                                    id="learning_mode"
+                                    name="learning_mode"
+                                >
+                                    <option value="">-- Pilih mode belajar --</option>
+                                    <option value="online">Online</option>
+                                    <option value="offline">Offline</option>
+                                    <option value="hybrid">Hybrid</option>
+                                </select>
+                            </div>
+
+                            <!-- JUMLAH PAKET -->
+                            <div class="field">
+                                <label for="package_count">Jumlah Paket</label>
+
+                                <select
+                                    id="package_count"
+                                    name="package_count"
+                                >
+                                    <option value="1">1 Paket</option>
+                                    <option value="2">2 Paket</option>
+                                    <option value="3">3 Paket</option>
+                                </select>
+                            </div>
+
+                            <!-- CATATAN -->
+                            <div class="field full">
+                                <label for="notes">Catatan Tambahan</label>
+
+                                <textarea
+                                    id="notes"
+                                    name="notes"
+                                    placeholder="Tuliskan pertanyaan atau catatan jika ada..."
+                                    maxlength="1000"
+                                ></textarea>
+                            </div>
+
+                            <!-- TOMBOL KIRIM -->
+                            <div class="field full">
+                                <button type="submit" class="submit-button">
+                                    Kirim Pendaftaran →
+                                </button>
+
+                                <p class="privacy-note">
+                                    Pastikan data yang dimasukkan sudah benar.
+                                </p>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
-</main>
 
-<footer>
-    <div class="container footer-content">
-        <a class="logo footer-logo" href="registration.php">
-            <span class="logo-icon">▣</span>
-            <span>KursusKu</span>
-        </a>
+    <!-- FOOTER -->
+    <footer>
+        <div class="container footer-content">
+            <a href="#beranda" class="footer-logo">
+                Kursus<span>Ku</span>
+            </a>
 
-        <span class="footer-text">
-            © 2026 KursusKu · Belajar dari mana saja
-        </span>
-    </div>
-</footer>
+            <p>
+                © <?= date('Y') ?> KursusKu. Belajar, berkembang, dan berkarya.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function pilihKursus(kode) {
+            const pilihan = document.getElementById('course_code');
+            pilihan.value = kode;
+        }
+    </script>
 
 </body>
 </html>

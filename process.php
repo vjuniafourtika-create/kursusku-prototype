@@ -23,10 +23,13 @@ $notes = trim($_POST['notes'] ?? '');
 
 $interests = $_POST['interests'] ?? [];
 
-// Pastikan interests berupa array
 if (!is_array($interests)) {
     $interests = [];
 }
+
+$interests = array_values(
+    array_intersect($interests, array_keys($interestOptions))
+);
 
 // Batasi interests hanya pada pilihan yang tersedia
 $allowedInterestKeys = array_keys($interestOptions);
