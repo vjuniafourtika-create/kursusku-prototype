@@ -2,8 +2,8 @@
 <?php
 require __DIR__ . '/helpers.php';
 
-// ARRAY DATA HISTORY PENDAFTARAN
-$history = [
+// ARRAY REGISTRATION
+$registration = [
     [
         'name' => 'Viona',
         'course' => 'Web Dasar',
@@ -28,7 +28,7 @@ $history = [
         'name' => 'Siti',
         'course' => 'JavaScript Dasar',
         'total' => 300000
-    ]
+    ],
 ];
 ?>
 
@@ -55,7 +55,9 @@ $history = [
 
             <div class="nav-links">
                 <a href="index.php">Beranda</a>
+
                 <a href="register.php">Daftar Kursus</a>
+
                 <a href="history.php" class="active">
                     History Pendaftaran
                 </a>
@@ -67,21 +69,25 @@ $history = [
     <!-- KONTEN UTAMA -->
     <main class="history-container">
 
+        <!-- HEADER -->
         <section class="history-header">
+
             <span class="history-badge">
-                DATA PENDAFTARAN
+                DATA REGISTRATION
             </span>
 
-            <h1>History Pendaftaran Kursus</h1>
+            <h1>History Pendaftaran</h1>
 
             <p>
-                Berikut adalah daftar riwayat pendaftaran peserta
-                kursus pada aplikasi KursusKu.
-                Data ditampilkan menggunakan array dan perulangan foreach.
+                Halaman ini menampilkan data pendaftaran peserta
+                kursus menggunakan array
+                <strong>$registration</strong> dan perulangan
+                <strong>foreach</strong>.
             </p>
+
         </section>
 
-        <!-- TABEL HISTORY -->
+        <!-- TABEL REGISTRATION -->
         <section class="history-card">
 
             <div class="table-wrapper">
@@ -99,30 +105,29 @@ $history = [
 
                     <tbody>
 
-                        <?php
-                        // PERULANGAN FOREACH
-                        foreach ($history as $index => $item):
-                        ?>
+                        <?php foreach ($registration as $index => $item): ?>
 
-                        <tr>
-                            <td>
-                                <?= $index + 1 ?>
-                            </td>
+                            <tr>
 
-                            <td>
-                                <strong>
-                                    <?= e($item['name']) ?>
-                                </strong>
-                            </td>
+                                <td>
+                                    <?= $index + 1 ?>
+                                </td>
 
-                            <td>
-                                <?= e($item['course']) ?>
-                            </td>
+                                <td>
+                                    <strong>
+                                        <?= e($item['name']) ?>
+                                    </strong>
+                                </td>
 
-                            <td class="total-price">
-                                <?= formatRupiah($item['total']) ?>
-                            </td>
-                        </tr>
+                                <td>
+                                    <?= e($item['course']) ?>
+                                </td>
+
+                                <td class="total-price">
+                                    <?= formatRupiah($item['total']) ?>
+                                </td>
+
+                            </tr>
 
                         <?php endforeach; ?>
 
