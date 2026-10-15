@@ -1,62 +1,91 @@
+```php
 <?php
+
+// ==========================================
+// 1. MEMANGGIL FILE DATA DAN HELPERS
+// ==========================================
 
 require __DIR__ . '/data.php';
 require __DIR__ . '/helpers.php';
 
-// Pastikan halaman hanya diproses melalui POST
+
+// ==========================================
+// 2. MEMERIKSA REQUEST METHOD
+// ==========================================
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(302);
     header('Location: register.php');
     exit;
 }
 
-// Ambil data dari form
+
+// ==========================================
+// 3. MENGAMBIL DATA DARI FORMULIR
+// ==========================================
+
 $name = trim($_POST['name'] ?? '');
 $email = trim($_POST['email'] ?? '');
 
-$courseCode = $_POST['course_code'] ?? '';
-$participantType = $_POST['participant_type'] ?? '';
-$learningMode = $_POST['learning_mode'] ?? '';
+$courseCode = trim($_POST['course_code'] ?? '');
+$participantType = trim($_POST['participant_type'] ?? '');
+$learningMode = trim($_POST['learning_mode'] ?? '');
 
-$packageCount = (int) ($_POST['package_count'] ?? 1);
+$packageCount = filter_var(
+    $_POST['package_count'] ?? null,
+    FILTER_VALIDATE_INT
+);
 
 $notes = trim($_POST['notes'] ?? '');
 
 $interests = $_POST['interests'] ?? [];
 
+
+// ==========================================
+// 4. VALIDASI ARRAY INTERESTS
+// ==========================================
+
 if (!is_array($interests)) {
-    $interests = [];
+    http_response_code(400);
+    exit('Permintaan tidak valid: interests harus berupa array.');
 }
 
-$interests = array_values(
-    array_intersect($interests, array_keys($interestOptions))
-);
-
-// Batasi interests hanya pada pilihan yang tersedia
 $allowedInterestKeys = array_keys($interestOptions);
 
 $interests = array_values(
-    array_intersect($interests, $allowedInterestKeys)
+    array_intersect(
+        $interests,
+        $allowedInterestKeys
+    )
 );
 
-// Validasi
+
+// ==========================================
+// 5. VALIDASI DATA FORMULIR
+// ==========================================
+
 $errors = [];
 
+// Validasi nama
 if ($name === '') {
     $errors[] = 'Nama wajib diisi.';
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+// Validasi email
+if ($email === '') {
+    $errors[] = 'Email wajib diisi.';
+} elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errors[] = 'Format email tidak valid.';
 }
 
-// Cari kursus
+// Validasi kursus
 $course = findCourse($courses, $courseCode);
 
 if ($course === null) {
     $errors[] = 'Kursus tidak ditemukan.';
 }
 
-// Validasi tipe peserta
+// Validasi jenis peserta
 if (!in_array(
     $participantType,
     ['mahasiswa', 'guru', 'umum'],
@@ -83,40 +112,71 @@ if (!in_array(
     $errors[] = 'Jumlah paket tidak valid.';
 }
 
-// ======================
-// Tampilkan error
-// ======================
+
+// ==========================================
+// 6. HTTP RESPONSE UNTUK DATA TIDAK VALID
+// ==========================================
 
 if ($errors !== []) {
+    http_response_code(422);
     ?>
-    <!doctype html>
+
+    <!DOCTYPE html>
     <html lang="id">
+
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Data Belum Valid - KursusKu</title>
+        <meta charset="UTF-8">
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        >
+        <title>Data Tidak Valid - KursusKu</title>
+        <link rel="stylesheet" href="assets/css/style.css">
     </head>
 
     <body>
-        <main>
-            <h1>Data belum dapat diproses</h1>
 
-            <ul>
-                <?php foreach ($errors as $error): ?>
-                    <li><?= e($error) ?></li>
-                <?php endforeach; ?>
-            </ul>
+        <main class="container">
 
-            <a href="register.php">Kembali ke form</a>
+            <section class="summary-card">
+
+                <h1>Data Belum Valid</h1>
+
+                <p>
+                    HTTP Response: 422 - Unprocessable Content
+                </p>
+
+                <p>
+                    Periksa kembali formulir pendaftaran kamu.
+                </p>
+
+                <ul>
+                    <?php foreach ($errors as $error): ?>
+                        <li><?= e($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+
+                <br>
+
+                <a href="register.php" class="btn-primary">
+                    Kembali ke Formulir
+                </a>
+
+            </section>
+
         </main>
+
     </body>
     </html>
+
     <?php
     exit;
 }
-// =========================
-// Hitung biaya
-// =========================
+
+
+// ==========================================
+// 7. MENGHITUNG BIAYA DAN DISKON
+// ==========================================
 
 $discountPercent = getDiscountPercent($participantType);
 
@@ -128,74 +188,201 @@ $discountAmount = intdiv(
 );
 
 $finalTotal = $grossTotal - $discountAmount;
+
 $learningModeLabel = getLearningModeLabel($learningMode);
+
+
+// ==========================================
+// 8. HTTP RESPONSE BERHASIL
+// ==========================================
+
+http_response_code(200);
 
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Hasil Pendaftaran - KursusKu</title>
+
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
 
-    <nav>
-        <a href="index.php">Beranda</a>
-        <a href="register.php">Daftar Kursus</a>
-        <a href="history.php">History Dummy</a>
-    </nav>
+    <!-- NAVIGASI -->
+
+    <header class="site-header">
+
+        <div class="container nav-wrap">
+
+            <a href="index.php" class="brand">
+                KursusKu
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.php">Beranda</a>
+                <a href="register.php">Daftar Kursus</a>
+                <a href="history.php">History Dummy</a>
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- KONTEN UTAMA -->
 
     <main class="container">
 
-        <h1>Ringkasan Pendaftaran</h1>
+        <section class="alert-success">
 
-        <p>Nama: <?= e($name) ?></p>
-        <p>Email: <?= e($email) ?></p>
-        <p>Kursus: <?= e($course['name']) ?></p>
+            <h1>Pendaftaran Berhasil!</h1>
 
-        <h3>Minat Belajar</h3>
+            <p>
+                HTTP Response: 200 - OK
+            </p>
 
-        <ul>
-            <?php if ($interests === []): ?>
-                <li>Belum memilih minat.</li>
-            <?php else: ?>
-                <?php foreach ($interests as $interest): ?>
-                    <li><?= e($interest) ?></li>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </ul>
+            <p>
+                Data pendaftaran berhasil diproses.
+            </p>
 
-        <p>Metode Belajar: <?= e($learningModeLabel) ?></p>
+        </section>
 
-        <p>Jumlah Paket: <?= $packageCount ?></p>
 
-        <p>Total Sebelum Diskon: <?= formatRupiah($grossTotal) ?></p>
+        <!-- DATA PESERTA -->
 
-        <p>Diskon: <?= $discountPercent ?>%</p>
+        <section class="summary-card">
 
-        <p>Total Akhir: <?= formatRupiah($finalTotal) ?></p>
+            <h2>Ringkasan Pendaftaran</h2>
 
-        <h3>Catatan</h3>
-        <p><?= e($notes) ?></p>
-        <h3>Minat</h3>
-<ul>
-    <?php if ($interests === []): ?>
-        <li>Belum memilih minat.</li>
-    <?php else: ?>
-        <?php foreach ($interests as $interest): ?>
-            <?php $label = $interestOptions[$interest] ?? $interest; ?>
-            <li><?= e($label) ?></li>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</ul>
+            <dl class="summary-list">
 
-        <a href="register.php">Kembali ke Form</a>
+                <dt>Nama</dt>
+                <dd><?= e($name) ?></dd>
+
+                <dt>Email</dt>
+                <dd><?= e($email) ?></dd>
+
+                <dt>Kursus</dt>
+                <dd><?= e($course['name']) ?></dd>
+
+                <dt>Jenis Peserta</dt>
+                <dd><?= e($participantType) ?></dd>
+
+                <dt>Metode Belajar</dt>
+                <dd><?= e($learningModeLabel) ?></dd>
+
+                <dt>Jumlah Paket</dt>
+                <dd><?= $packageCount ?></dd>
+
+            </dl>
+
+
+            <!-- MINAT BELAJAR -->
+
+            <h3>Minat Belajar</h3>
+
+            <ul>
+
+                <?php if ($interests === []): ?>
+
+                    <li>Belum memilih minat.</li>
+
+                <?php else: ?>
+
+                    <?php foreach ($interests as $interest): ?>
+
+                        <li>
+                            <?= e($interestOptions[$interest]) ?>
+                        </li>
+
+                    <?php endforeach; ?>
+
+                <?php endif; ?>
+
+            </ul>
+
+
+            <!-- CATATAN -->
+
+            <h3>Catatan</h3>
+
+            <p>
+                <?= $notes !== ''
+                    ? nl2br(e($notes))
+                    : 'Tidak ada catatan.' ?>
+            </p>
+
+
+            <!-- RINCIAN BIAYA -->
+
+            <h2>Rincian Biaya</h2>
+
+            <dl class="summary-list">
+
+                <dt>Harga per Paket</dt>
+                <dd><?= formatRupiah($course['fee']) ?></dd>
+
+                <dt>Total Sebelum Diskon</dt>
+                <dd><?= formatRupiah($grossTotal) ?></dd>
+
+                <dt>Persentase Diskon</dt>
+                <dd><?= $discountPercent ?>%</dd>
+
+                <dt>Nominal Diskon</dt>
+                <dd><?= formatRupiah($discountAmount) ?></dd>
+
+                <dt>Total Akhir</dt>
+                <dd>
+                    <strong>
+                        <?= formatRupiah($finalTotal) ?>
+                    </strong>
+                </dd>
+
+            </dl>
+
+
+            <!-- TOMBOL -->
+
+            <div class="history-action">
+
+                <a href="register.php" class="btn-primary">
+                    Daftar Kursus Lagi
+                </a>
+
+                <a href="index.php" class="btn-secondary">
+                    Kembali ke Beranda
+                </a>
+
+            </div>
+
+        </section>
 
     </main>
 
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="container">
+            <p>
+                &copy; 2026 KursusKu.
+                Praktikum Pemrograman Web III.
+            </p>
+        </div>
+
+    </footer>
+
 </body>
 </html>
+```
