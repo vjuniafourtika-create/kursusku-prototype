@@ -33,6 +33,7 @@ $year = date('Y');
                 <a href="#kontak">Kontak</a>
                 <a href="register.php">Daftar Sekarang</a>
                 <a href="history.php">History</a>
+                <a href="fee-calculator.php">Kalkulator Biaya</a>
             </nav>
 
             <a href="register.php" class="btn btn-primary">

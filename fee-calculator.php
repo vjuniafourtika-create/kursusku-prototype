@@ -1,4 +1,3 @@
-
 <?php
 $courseName = 'Laravel Fundamental';
 $fee = 350000;
@@ -157,6 +156,56 @@ function rupiah(int $amount): string
             padding: 17px 0;
             border-bottom: 1px solid #edf0f5;
             font-size: 14px;
+            .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 10px;
+}
+
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.payment-table th,
+.payment-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #edf0f5;
+    text-align: left;
+}
+
+.payment-table th {
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-weight: bold;
+}
+
+.payment-table td:last-child,
+.payment-table th:last-child {
+    text-align: right;
+}
+
+.payment-table .discount-value {
+    color: #16a34a;
+    font-weight: bold;
+}
+
+.back-link {
+    margin-top: 20px;
+}
+
+.back-link a {
+    display: inline-block;
+    color: #2563eb;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
         }
 
         .info span:first-child {
@@ -301,23 +350,35 @@ function rupiah(int $amount): string
             <section class="card">
                 <h2>Rincian Pembayaran</h2>
 
-                <div class="info">
-                    <span>Subtotal</span>
-                    <strong><?= rupiah($subtotal) ?></strong>
-                </div>
+<div class="table-wrapper">
+    <table class="payment-table">
+        <thead>
+            <tr>
+                <th>Komponen</th>
+                <th>Nilai</th>
+            </tr>
+        </thead>
 
-                <div class="info">
-                    <span>Diskon <?= $discountPercent ?>%</span>
-                    <strong class="discount">
-                        − <?= rupiah($discount) ?>
-                    </strong>
-                </div>
+        <tbody>
+            <tr>
+                <td>Subtotal</td>
+                <td><?= rupiah($subtotal) ?></td>
+            </tr>
 
-                <div class="info">
-                    <span>Biaya administrasi</span>
-                    <strong><?= rupiah($adminFee) ?></strong>
-                </div>
+            <tr>
+                <td>Diskon <?= $discountPercent ?>%</td>
+                <td class="discount-value">
+                    - <?= rupiah($discount) ?>
+                </td>
+            </tr>
 
+            <tr>
+                <td>Biaya Administrasi</td>
+                <td><?= rupiah($adminFee) ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
                 <div class="total-box">
                     <p>Total pembayaran</p>
                     <h3><?= rupiah($total) ?></h3>
@@ -332,6 +393,9 @@ function rupiah(int $amount): string
                     Total = Subtotal − Diskon + Biaya Administrasi.
                     Semua perhitungan dilakukan menggunakan PHP.
                 </div>
+                <p class="back-link">
+    <a href="index.php">← Kembali ke Beranda KursusKu</a>
+</p>
             </section>
 
         </div>
